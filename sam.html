@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hussam Hammad - Investment Analyst</title>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The SPA is a Personal Dashboard with a responsive navigation bar (top on mobile, fixed-left on desktop). This structure is chosen over a linear report to allow a busy hiring manager (the target user) to non-linearly explore the candidate's profile. The key sections are: Summary (for high-level stats), Interactive Experience (the 'wow' feature), Skills (visual breakdown), and Projects. The core user flow is: 1) Land on Summary, see key metrics ($114M AUM). 2) Click nav to 'Experience'. 3) Click a job on the timeline (e.g., 'TCH & SWA'). 4) This JS event dynamically updates a details panel (with text) AND a Chart.js donut chart, visually breaking down that role (e.g., 70% Portfolio Mgmt, 30% Automation). This interaction is designed to immediately prove the "wear multiple hats" value prop. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Key Metrics ($114M AUM, $1B AUM). Goal: Inform/Impress. Viz/Method: Large HTML/Tailwind "Stat Cards" in Summary. Interaction: Static. Justification: Immediate visibility of high-impact numbers.
+        - Report Info: Job Roles & Responsibilities. Goal: Organize/Compare. Viz/Method: JS-powered interactive timeline linked to a text panel and a Chart.js Donut Chart. Interaction: onClick on a job title updates the text and chart data. Justification: Visually proves the "hybrid" (finance + tech) nature of the candidate's experience for each role. Library: Chart.js (Canvas).
+        - Report Info: Technical Skills (Python, VBA). Goal: Inform. Viz/Method: Simple horizontal bar charts made with HTML/Tailwind div widths (e.g., w-10/12). Interaction: Static. Justification: Quick, visual gauge of proficiency. NO SVG.
+        - Report Info: Finance Skills. Goal: Inform. Viz/Method: HTML/Tailwind "pills" in a flex-wrap container. Interaction: Static. Justification: Modern, scannable layout.
+        - Report Info: Projects. Goal: Organize/Link. Viz/Method: HTML/Tailwind "cards" with links to GitHub. Interaction: Click to external site. Justification: Standard portfolio presentation.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .nav-link {
+            @apply block w-full px-4 py-3 text-left text-sm font-medium text-gray-300 rounded-lg hover:bg-blue-700 hover:text-white transition-colors duration-150;
+        }
+        .nav-link.active {
+            @apply bg-blue-700 text-white shadow-lg;
+        }
+        .stat-card {
+            @apply bg-white p-6 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl;
+        }
+        .skill-bar-bg {
+            @apply w-full bg-gray-200 rounded-full h-2.5;
+        }
+        .skill-bar {
+            @apply bg-blue-600 h-2.5 rounded-full;
+        }
+        .job-button {
+            @apply w-full md:w-auto flex-1 px-4 py-3 text-sm font-medium text-gray-700 bg-white rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all;
+        }
+        .job-button.active {
+            @apply bg-blue-600 text-white shadow-md;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans leading-relaxed">
+
+    <!-- Responsive Navigation (Top on Mobile, Left on Desktop) -->
+    <nav class="bg-gray-900 text-white p-4 shadow-md md:fixed md:w-64 md:h-screen md:flex md:flex-col md:justify-between z-10">
+        <div>
+            <div class="text-center md:mt-4 md:mb-8">
+                <h1 class="text-3xl font-bold text-white">Hussam Hammad</h1>
+                <h2 class="text-md text-blue-300">CFA Level III Candidate</h2>
+            </div>
+            <ul class="flex flex-row justify-center space-x-2 md:flex-col md:space-x-0 md:space-y-2" id="nav-links">
+                <li><a href="#summary" class="nav-link active">Summary</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#projects" class="nav-link">Projects & Education</a></li>
+            </ul>
+        </div>
+        <div class="hidden md:block p-4 border-t border-gray-700">
+            <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Contact</h3>
+            <a href="mailto:HussamKHammad@gmail.com" class="nav-link text-xs">Email</a>
+            <a href="https://linkedin.com/in/hussamhammad" target="_blank" class="nav-link text-xs">LinkedIn</a>
+            <a href="https://github.com/hussamhammad1" target="_blank" class="nav-link text-xs">GitHub</a>
+            <a href="tel:+16132922227" class="nav-link text-xs">+1 (613) 292-2227</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="md:ml-64 p-6 md:p-10">
+
+        <!-- Section 1: Summary & Key Metrics -->
+        <section id="summary" class="min-h-[80vh] flex flex-col justify-center">
+            <h2 class="text-4xl font-bold text-blue-700 mb-4">Investment Analyst</h2>
+            <p class="text-lg text-gray-700 max-w-3xl mb-8">
+                Quantitative and results-driven analyst with over 3.5 years of experience in portfolio management, financial modeling, and process automation. Proven ability to combine rigorous financial analysis with technical skills (Python, VBA) to build scalable reporting tools, enhance portfolio evaluation, and drive operational efficiency.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="stat-card">
+                    <div class="text-sm font-medium text-gray-500 uppercase">Institutional AUM</div>
+                    <div class="text-5xl font-extrabold text-blue-700 mt-2">$114M</div>
+                    <div class="text-sm text-gray-600 mt-1">Managed & Monitored</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-sm font-medium text-gray-500 uppercase">Portfolio Modeling</div>
+                    <div class="text-5xl font-extrabold text-blue-700 mt-2">$1B+</div>
+                    <div class="text-sm text-gray-600 mt-1">REIT Portfolio (Co-op)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="text-sm font-medium text-gray-500 uppercase">Annual Premiums</div>
+                    <div class="text-5xl font-extrabold text-blue-700 mt-2">$30M+</div>
+                    <div class="text-sm text-gray-600 mt-1">Managed in Client Portfolios</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive Experience -->
+        <section id="experience" class="py-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Interactive Career Timeline</h2>
+            <p class="text-gray-600 mb-8 max-w-3xl">
+                My value is in combining financial analysis with technical execution. Click each role to see a detailed breakdown of my responsibilities and a visual representation of my focus in that position.
+            </p>
+
+            <div class="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0 mb-8" id="job-buttons">
+                <button class="job-button active" data-job-id="tch">TCH & Summit Wealth</button>
+                <button class="job-button" data-job-id="eos">Elements of Success</button>
+                <button class="job-button" data-job-id="contract">Finance Associate (Contract)</button>
+                <button class="job-button" data-job-id="coop">Co-op Roles (REIT & Gov't)</button>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-blue-700" id="job-title"></h3>
+                        <p class="text-md font-medium text-gray-600 mb-4" id="job-company"></p>
+                        <ul class="list-disc list-outside pl-5 space-y-2 text-sm text-gray-700" id="job-bullets">
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-center text-gray-800 mb-4">Role Focus Breakdown</h4>
+                        <div class="chart-container">
+                            <canvas id="experienceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Skills & Competencies -->
+        <section id="skills" class="py-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Skills & Competencies</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Technical Skills -->
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Technical Toolkit</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <span class="text-sm font-medium">Python (Pandas, NumPy)</span>
+                            <div class="skill-bar-bg mt-1"><div class="skill-bar" style="width: 85%"></div></div>
+                        </div>
+                        <div>
+                            <span class="text-sm font-medium">VBA (Macros, Automation)</span>
+                            <div class="skill-bar-bg mt-1"><div class="skill-bar" style="width: 90%"></div></div>
+                        </div>
+                        <div>
+                            <span class="text-sm font-medium">Advanced Excel (Top 5% LinkedIn)</span>
+                            <div class="skill-bar-bg mt-1"><div class="skill-bar" style="width: 95%"></div></div>
+                        </div>
+                        <div>
+                            <span class="text-sm font-medium">SQL (Basic)</span>
+                            <div class="skill-bar-bg mt-1"><div class="skill-bar" style="width: 60%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Skills -->
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Financial Analysis</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-2 rounded-full">Portfolio Management</span>
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-2 rounded-full">Financial Modeling</span>
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-2 rounded-full">Asset Allocation</span>
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-2 rounded-full">Equity Research</span>
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-2 rounded-full">Performance Reporting</span>
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-2 rounded-full">Due Diligence</span>
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-4 py-2 rounded-full">Risk Assessment</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Projects & Education -->
+        <section id="projects" class="py-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Projects & Education</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Education -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Education & Credentials</h3>
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-blue-700">CFA Level III Candidate</h4>
+                        <p class="text-gray-600">CFA Institute</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-blue-700">Bachelor of Commerce (Honours)</h4>
+                        <p class="text-gray-600">Concentration in Finance</p>
+                        <p class="text-gray-600">Carleton University, Ottawa, ON</p>
+                        <p class="text-sm text-gray-500 mt-1">CGPA: 3.6 / 4.0</p>
+                    </div>
+                </div>
+                
+                <!-- Projects -->
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">GitHub Projects</h3>
+                    <div class="space-y-6">
+                        <div class="group">
+                            <a href="https://github.com/hussamhammad1/VBA-Projects" target="_blank" class="text-lg font-bold text-blue-700 group-hover:underline">VBA Real Estate Model</a>
+                            <p class="text-gray-600 text-sm mt-1">Dynamic valuation model for residential real estate investments. Automates cash flow projections and key metric calculations (Cap Rate, IRR).</p>
+                        </div>
+                        <div class="group">
+                            <a href="https://github.com/hussamhammad1/stock-data-projects" target="_blank" class="text-lg font-bold text-blue-700 group-hover:underline">Python Stock Analyzer</a>
+                            <p class="text-gray-600 text-sm mt-1">Script utilizing Pandas to fetch, analyze, and visualize historical stock data, calculating moving averages and volatility.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Contact -->
+        <footer id="contact" class="text-center py-16 border-t border-gray-200 mt-20">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+            <p class="text-gray-600 mb-8">I'm actively seeking new opportunities and am available to chat.</p>
+            <div class="flex justify-center items-center space-x-6">
+                <a href="mailto:HussamKHammad@gmail.com" class="text-blue-600 hover:underline font-medium">HussamKHammad@gmail.com</a>
+                <span class="text-gray-300">|</span>
+                <a href="https://linkedin.com/in/hussamhammad" target="_blank" class="text-blue-600 hover:underline font-medium">LinkedIn</a>
+                <span class="text-gray-300">|</span>
+                <a href="https://github.com/hussamhammad1" target="_blank" class="text-blue-600 hover:underline font-medium">GitHub</a>
+                <span class="text-gray-300">|</span>
+                <a href="tel:+16132922227" class="text-blue-600 hover:underline font-medium">+1 (613) 292-2227</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            Chart.defaults.font.family = "Arial, sans-serif";
+            
+            const experienceData = {
+                tch: {
+                    title: "Financial Analyst",
+                    company: "The Consulting House & Summit Wealth Advisory Group (Apr 2021 – Present)",
+                    bullets: [
+                        "Manage and monitor institutional retirement portfolios totaling $114 million in AUM, executing performance evaluations and ensuring alignment with investment policy statements.",
+                        "Analyze client investment portfolios (up to $37 million), modeling performance and providing data-driven recommendations on asset allocation and security selection.",
+                        "Develop compensation packages, forecasting liabilities for portfolios generating over $30 million in annual premiums.",
+                        "Automated key operational processes using Python and VBA, building tools to streamline performance reporting, client onboarding, and cost-basis calculations."
+                    ],
+                    chartData: [65, 35],
+                    chartLabels: ["Portfolio Management & Analysis", "Process Automation & Tooling"]
+                },
+                eos: {
+                    title: "Financial Analyst",
+                    company: "Elements of Success Advisory (Jan 2019 – Nov 2019)",
+                    bullets: [
+                        "Designed and built custom financial tools for 9+ clients across Canada & the US using Python, Dart, and VBA.",
+                        "Developed an automated financial reporting model in Excel, consolidating data from multiple sources to improve clients' financial visibility and decision-making speed.",
+                        "Assisted clients in marketing and financial automation projects."
+                    ],
+                    chartData: [70, 30],
+                    chartLabels: ["Custom Tool Development (VBA/Python)", "Financial Reporting"]
+                },
+                contract: {
+                    title: "Accounting & Finance Associate (Contract)",
+                    company: "Emerson Canada & VHA Home HealthCare (Jan 2020 – Mar 2021)",
+                    bullets: [
+                        "Engaged in contract roles to manage high-volume financial operations.",
+                        "Reconciled Canadian ledger at Emerson Canada with over $50K in daily transactions.",
+                        "Managed Accounts Receivable for VHA Home HealthCare with over 500 weekly invoices.",
+                        "Identified and corrected over 1,000 data-collecting errors, improving ledger accuracy."
+                    ],
+                    chartData: [50, 50],
+                    chartLabels: ["Ledger Reconciliation", "Accounts Receivable Mgmt"]
+                },
+                coop: {
+                    title: "Co-op Roles (Accounting & Risk)",
+                    company: "CLV Group / InterRent REIT & CSC (Gov't) (Jan 2018 – Dec 2018)",
+                    bullets: [
+                        "Developed and maintained financial models for a $1 billion+ AUM residential real estate portfolio at CLV Group & InterRent REIT.",
+                        "Analyzed property performance, calculated CAM recoverable, HST, and property taxes for over 100 properties.",
+                        "Prepared business cases and conducted risk, financial, and strategic analysis for new government projects at Correctional Service of Canada."
+                    ],
+                    chartData: [60, 40],
+                    chartLabels: ["REIT Financial Modeling", "Gov't Project Risk Analysis"]
+                }
+            };
+
+            const ctx = document.getElementById('experienceChart').getContext('2d');
+            let experienceChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.8)', // blue-600
+                            'rgba(59, 130, 246, 0.8)', // blue-500
+                            'rgba(96, 165, 250, 0.8)', // blue-400
+                        ],
+                        borderColor: 'rgba(255, 255, 255, 0.7)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                boxWidth: 12,
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const jobButtons = document.querySelectorAll('.job-button');
+            const titleEl = document.getElementById('job-title');
+            const companyEl = document.getElementById('job-company');
+            const bulletsEl = document.getElementById('job-bullets');
+
+            function updateExperience(jobId) {
+                const data = experienceData[jobId];
+
+                titleEl.innerText = data.title;
+                companyEl.innerText = data.company;
+
+                bulletsEl.innerHTML = '';
+                data.bullets.forEach(bullet => {
+                    const li = document.createElement('li');
+                    li.innerText = bullet;
+                    bulletsEl.appendChild(li);
+                });
+
+                experienceChart.data.labels = data.chartLabels;
+                experienceChart.data.datasets[0].data = data.chartData;
+                experienceChart.update();
+
+                jobButtons.forEach(button => {
+                    button.classList.remove('active');
+                    if (button.dataset.jobId === jobId) {
+                        button.classList.add('active');
+                    }
+                });
+            }
+
+            jobButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    updateExperience(button.dataset.jobId);
+                });
+            });
+
+            updateExperience('tch');
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section, footer');
+
+            function changeActiveLink() {
+                let index = sections.length;
+
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                navLinks.forEach((link) => link.classList.remove('active'));
+                
+                const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+                if(activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+
+            changeActiveLink();
+            window.addEventListener('scroll', changeActiveLink);
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.hash !== "") {
+                        e.preventDefault();
+                        const hash = this.hash;
+                        const targetElement = document.querySelector(hash);
+                        if(targetElement) {
+                            const offset = 60;
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - (window.innerWidth < 768 ? offset : 0);
+      
+                            window.scrollTo({
+                                 top: offsetPosition,
+                                 behavior: "smooth"
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
